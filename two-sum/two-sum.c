@@ -1,6 +1,6 @@
-#include <uthash.h>
-#include <stdio.h>
-
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
 
 struct hash_map {
     int index;
@@ -18,11 +18,7 @@ void addNumber(int num, int index){
     item -> index = index;
     HASH_ADD_INT(data, value, item);
 }
-void debug_print(){
-    Map* s;
-    for(s=data; s != NULL; s=(Map*)(s->hh.next))
-        printf("key %d:  value %d\n", s->value, s->index);
-}
+
 int findIndexOfNumber(int number){
     Map *found = NULL;
     HASH_FIND_INT(data, &number, found);
@@ -37,22 +33,22 @@ void cleanup(){
     }
 }
 
-int main() {
+int* twoSum(int* nums, int numsSize, int target) {
     int i,j;
-    int numsSize = 10, target=20;
-    int *ret = malloc( 2 * sizeof(int));
-
-    for (i = 10; i < numsSize + 10 ; i++){
-        addNumber(i, i + 1);
-    }
-    debug_print();
+    int *ret = malloc(2*sizeof(int));
+    
     for (i = 0; i < numsSize ; i++){
-        j = findIndexOfNumber( i + 10);
-        printf("%d\n", j);
+        addNumber(nums[i], i + 1);
     }
-    cleanup();
-    return 0;
-
+    
+    for (i = 0; i < numsSize ; i++){
+        j = findIndexOfNumber(target - nums[i]);
+        if (j != -1 && j != i + 1){
+            ret[0] = (j < i + 1) ? j : (i + 1);
+            ret[1] = (j > i + 1) ? j : (i + 1);
+            cleanup();
+            return ret;
+        }
+    }
+    
 }
-
-
